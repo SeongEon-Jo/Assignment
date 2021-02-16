@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>신청내역</title>
+  </head>
+  <body>
+    <h1>신청내역</h1>
+    <% if (orders.length > 0) { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">순서</th>
+          <th scope="col">이름</th>
+          <th scope="col">전화번호</th>
+          <th scope="col">주소</th>
+          <th scope="col">신청 시각</th>
+          <th scope="col">요청 사항</th>
+          <th scope="col">신청 취소</th>
+        </tr>
+      </thead>
+      <% orders.forEach((order, index) => {%>
+      <tbody>
+        <tr>
+          <th scope="row"><%= orders.length - index %></th>
+          <td><%= order.username %></td>
+          <td><%= order.phone %></td>
+          <td><%= order.address%></td>
+          <td><%= order.createdAt %></td>
+          <td><%= order.comment %></td>
+          <% if (Date.now() - order.createdAt < (1000*60*60)) { %>
+          <form action="/orderlists/<%= order._id %>?_method=DELETE" method="POST"><td><input type="submit" value="취소"></input></td></form>
+          <% } else {%>
+          <td>취소불가</td>
+          <%}%>
+        </tr>
+      </tbody>
+      <%})%>
+    </table>
+    <%} else {%>
+      <h1>주문 내역이 존재하지 않습니다.</h1>
+      <% } %>
+      <div class="d-grid gap-2 d-md-block">
+        <a class="btn btn-primary" href="/" role="button" style="margin-bottom: 5px;">신청하기 페이지</a>
+      </div>
+      <div>
+        <a class="btn btn-primary" href="/check-order" role="button">신청내역 조회페이지</a>
+      </div>
+      <p> * 신청 취소는 신청 후 1시간 이내에만 가능합니다.</p>
+  </body>
+</html>
